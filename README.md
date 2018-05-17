@@ -28,10 +28,10 @@ matplotlib
 ### CUDA 8.0
 download GPU driver run.file http://www.geforce.cn/drivers
 my GPU use runflie: NVIDIA-Linux-x86_64-384.111.run
-```bash
+``bash
 sudo chmod a+x NVIDIA-Linux-x86_64-384.111.run
 sudo gedit /etc/modprobe.d/blacklist.conf 
-```
+``
 append `backlist nouveau`in the end
 ```bash
 sudo apt-get --purge remove xserver-xorg-video-nouveau
