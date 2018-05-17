@@ -1,10 +1,12 @@
 # faceswap-huang
 
 ## computer
+```bash
 ubuntu 14.04
 nvidia-1050TI
-
+```
 ## software
+```bash
 CUDA 8.0
 CUDNN 6.0
 python 3.5
@@ -19,3 +21,4 @@ dlib
 face_recognition
 tqdm
 matplotlib
+```
