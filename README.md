@@ -52,3 +52,53 @@ than perform operations `accept>continue install>Yes>ok.....`
 sudo /etc/init.d/lightdm start
 sudo apt-get install mesa-utills
 ```
+Check whether your gpus can be installed with CUDA.
+```bash
+lspci | grep -i nvidia
+```
+Check whether your gpus can install CUDA.
+```bash
+ uname -m && cat /etc/*release
+```
+Verify whether the operating system installed the GCC
+```bash
+gcc -v
+```
+Install the CUDA Toolkit(deb local)
+download cuda-repo-ubuntu1404-8-0-local-ga2_8.0.61-1_amd64.deb from https://developer.nvidia.com/cuda-downloads
+```bash
+sudo dpkg -i cuda-repo-ubuntu1404-8-0-local-ga2_8.0.61-1_amd64.deb
+sudo apt-get update
+sudo apt-get install cuda
+```
+After the installation is complete, declare the environment variable and write it to the end of ~/.bashrc.
+`export PATH=/usr/local/cuda-8.0/bin${PATH:+:${PATH}}` 
+`export LD_LIBRARY_PATH=/usr/local/cuda-8.0/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}`
+```bash
+source ~/.bashrc
+```
+Then set the environment variable and the dynamic link library in the command line input
+```bash
+sudo gedit /etc/profile
+```
+Add at the end of the open file
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+```
+After saving, create the link file.
+```bash
+sudo gedit /etc/ld.so.conf.d/cuda.conf
+```
+Add at the end of the open file
+```bash
+/usr/local/cuda/lib64
+```
+```bash
+sudo ldconfig
+```
+test suda Samples
+```bash
+cd /usr/local/cuda-7.5/samples/1_Utilities/deviceQuery
+make
+sudo ./deviceQuery
+```
