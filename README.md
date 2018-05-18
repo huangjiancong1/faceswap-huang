@@ -238,6 +238,12 @@ test
 ```bash
 ffmpeg -i "video.mp4" -r 5 -q:v 2 -f image2 image-3%d.jpeg
 ```
+### setup faceswap
+```bash
+cd faceswap-huang
+sudo python3 setup.py
+python3 faceswap.py -h
+```
 # use
 ### EXTRACT
 So here's a problem. We have a ton of pictures of both our subjects, but they're just pictures of them doing stuff or in an environment with other people. Their bodies are on there, they're on there with other people... It's a mess. We can only train our bot if the data we have is consistent and focusses on the subject we want to swap. This is where faceswap first comes in.
