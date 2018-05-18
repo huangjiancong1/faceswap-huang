@@ -1,11 +1,11 @@
 # faceswap-huang
 
-## computer
+# computer
 ```bash
 ubuntu 14.04
 nvidia-1050TI
 ```
-## software
+# software
 ```bash
 CUDA 8.0
 CUDNN 6.0
@@ -24,7 +24,7 @@ face_recognition
 tqdm
 matplotlib
 ```
-## install
+# install
 ### CUDA 8.0
 download GPU driver run.file http://www.geforce.cn/drivers
 my GPU use runflie: NVIDIA-Linux-x86_64-384.111.run
@@ -200,7 +200,7 @@ cd ../../
 wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python
 sduo python3 setup.py install
 ```
-### Other package
+### Other package with python3
 ```bash
 sudo pip3 install pathlib==1.0.1
 sudo pip3 install scandir==1.6
@@ -210,4 +210,86 @@ sudo pip3 install scikit-image
 sudo pip3 install face_recognition
 sudo pip3 install tqdm
 sudo pip3 install matplotlib
+```
+### FFmpeg
+FFmpeg is very useful to make more input photo to train.(nearly more than 400 photos). It turns video into a lot of images.
+We need to download install package from http://www.ffmpeg.org/download.html
+```bash
+sudo apt-get install yasm 
+sudo apt-get install libx264-dev
+sudo apt-get install libfaac-dev 
+sudo apt-get install libmp3lame-dev 
+sudo apt-get install libtheora-dev 
+sudo apt-get install libvorbis-dev 
+sudo apt-get install libxvidcore-dev 
+sudo apt-get install libxext-dev 
+sudo apt-get install libxfixes-dev 
+cd ffmpeg-4.0
+sudo -s
+source configure
+make
+make install
+```
+test
+```bash
+ffmpeg -i "video.mp4" -r 5 -q:v 2 -f image2 image-3%d.jpeg
+```
+# use
+### EXTRACT
+So here's a problem. We have a ton of pictures of both our subjects, but they're just pictures of them doing stuff or in an environment with other people. Their bodies are on there, they're on there with other people... It's a mess. We can only train our bot if the data we have is consistent and focusses on the subject we want to swap. This is where faceswap first comes in.
+```bash
+# To convert trump:
+python faceswap.py extract -i ~/faceswap/photo/trump -o ~/faceswap/data/trump
+# To convert cage:
+python faceswap.py extract -i ~/faceswap/photo/cage -o ~/faceswap/data/cage
+```
+We specify our photo input directory and the output folder where our training data will be saved. The script will then try its best to recognize face landmarks, crop the image to that size, and save it to the output folder. Note: this script will make grabbing test data much easier, but it is not perfect. It will (incorrectly) detect multiple faces in some photos and does not recognize if the face is the person who we want to swap. Therefore: **Always check your training data before you start training.** The training data will influence how good your model will be at swapping.
+You can see the full list of arguments for extracting via help flag. i.e.
+```bash
+python faceswap.py extract -h
+```
+### TRAIN
+The training process will take the longest, especially on CPU. We specify the folders where the two faces are, and where we will save our training model. It will start hammering the training data once you run the command. I personally really like to go by the preview and quit the processing once I'm happy with the results.
+```bash
+python faceswap.py train -A ~/faceswap/data/trump -B ~/faceswap/data/cage -m ~/faceswap/models/
+# or -p to show a preview
+python faceswap.py train -A ~/faceswap/data/trump -B ~/faceswap/data/cage -m ~/faceswap/models/ -p 
+```
+If you use the preview feature, select the preview window and press ENTER to save your processed data and quit gracefully. Without the preview enabled, you might have to forcefully quit by hitting Ctrl+C to cancel the command. Note that it will save the model once it's gone through about 100 iterations, which can take quite a while. So make sure you save before stopping the process.
+You can see the full list of arguments for training via help flag. i.e.
+```bash
+python faceswap.py train -h
+```
+### CONVERT
+Now that we're happy with our trained model, we can convert our video. How does it work? Similarly to the extraction script, actually! The conversion script basically detects a face in a picture using the same algorithm, quickly crops the image to the right size, runs our bot on this cropped image of the face it has found, and then (crudely) pastes the processed face back into the picture.
+Remember those initial pictures we had of Trump? Let's try swapping a face there. We will use that directory as our input directory, create a new folder where the output will be saved, and tell them which model to use.
+```bash
+python faceswap.py convert -i ~/faceswap/photo/trump/ -o ~/faceswap/output/ -m ~/faceswap/models/
+```
+It should now start swapping faces of all these pictures.
+You can see the full list of arguments available for converting via help flag. i.e.
+```bash
+python faceswap.py convert -h
+```
+### GUI
+All of the above commands and options can be run from the GUI. This is launched with:
+```bash
+python faceswap.py gui
+```
+### Video's
+A video is just a series of pictures in the form of frames. Therefore you can gather the raw images from them for your dataset or combine your results into a video.
+### EFFMPEG
+You can perform various video processes with the built in effmpeg tool. You can see the full list of arguments available by running:
+```bash
+python tools.py effmpeg -h
+```
+### Extracting video frames with FFMPEG
+Alternatively you can split a video into seperate frames using [ffmpeg](https://www.ffmpeg.org) for instance. Below is an example command to process a video to seperate frames.
+```bash
+ffmpeg -i /path/to/my/video.mp4 /path/to/output/video-frame-%d.png
+```
+### Generating a video
+If you split a video, using [ffmpeg](https://www.ffmpeg.org) for example, and used them as a target for swapping faces onto you can combine these frames again. The command below stitches the png frames back into a single video again.
+```bash
+ffmpeg -i video-frame-%0d.png -c:v libx264 -vf "fps=25,format=yuv420p" out.mp4
 ```
