@@ -124,3 +124,27 @@ check the cudnn version
 ```bash
 cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2
 ```
+### python 3.5
+note: never remove the python3 or python2 which already in your system
+```bash
+sudo add-apt-repository ppa:fkrull/deadsnakes  
+sudo apt-get update  
+sudo apt-get install python3.5 
+```
+Cancel the original Python 3.4 and link Python3 to the latest 3.5.
+```bash
+sudo mv /usr/bin/python3 /usr/bin/python3-old  
+sudo ln -s /usr/bin/python3.5 /usr/bin/python3 
+```
+install newest pip3 and ipython
+```bash
+wget https://bootstrap.pypa.io/get-pip.py  
+sudo python3 get-pip.py  
+sudo pip3 install setuptools --upgrade  
+sudo pip3 install ipython[all] 
+```
+optional: switch back to the link file
+```bash
+sudo rm /usr/bin/python3  
+sudo mv /usr/bin/python3-old /usr/bin/python3  
+```
