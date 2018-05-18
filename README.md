@@ -102,3 +102,25 @@ cd /usr/local/cuda-7.5/samples/1_Utilities/deviceQuery
 make
 sudo ./deviceQuery
 ```
+### CUDNN 6.0
+download  cudnn 6.0 (cudnn-8.0-linux-x64-v6.0.tgz) in https://developer.nvidia.com/rdp/cudnn-download
+extract the tgz file 
+entry the include file in the extacted file
+```bash
+sudo cp cudnn.h /usr/local/cuda/include/ 
+```
+entry the lib64 file in the extacted file
+```bash
+sudo cp lib* /usr/local/cuda/lib64/ 
+```
+then
+```bash
+cd /usr/local/cuda/lib64/
+sudo rm -rf libcudnn.so libcudnn.so.6           
+sudo ln -s libcudnn.so.6.0.21 libcudnn.so.6     
+sudo ln -s libcudnn.so.6 libcudnn.so            
+```
+check the cudnn version
+```bash
+cat /usr/local/cuda/include/cudnn.h | grep CUDNN_MAJOR -A 2
+```
