@@ -174,3 +174,29 @@ save and
 source ~/.bashrc 
 pkg-config --modversion opencv 
 ```
+use in python3
+```bash
+sudo pip3 install opencv-python==3.3.0.10
+```
+### Tensorflow-gpu 1.4
+```bash
+pip3 install --upgrade tensorflow==1.4
+```
+test
+```bash
+python3
+>>import tensorflow as tf
+```
+without any error
+### dlib 
+download dlib package in http://dlib.net/ ,any version can.
+```bash
+cd /dlib-19.10/examples
+mkdir build
+cd build
+cmake ..
+cmake --build . --config Release
+cd ../../
+wget https://bootstrap.pypa.io/ez_setup.py -O - | sudo python
+sduo python3 setup.py install
+```
