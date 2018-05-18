@@ -1,5 +1,5 @@
 # faceswap-huang
-# Contents
+# contents
 1. [computer](#computer)
 2. [package](#package)
 3. [install](#install)
