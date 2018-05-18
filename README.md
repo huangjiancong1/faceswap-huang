@@ -148,3 +148,29 @@ optional: switch back to the link file
 sudo rm /usr/bin/python3  
 sudo mv /usr/bin/python3-old /usr/bin/python3  
 ```
+### opencv-3.3.0
+download opencv 3.3.0 in https://opencv.org/releases.html
+unzip opencv-3.3.0.zip file
+```bash
+cd opencv-3.3.0 
+sudo apt-get install build-essential libgtk2.0-dev libvtk5-dev libjpeg-dev libtiff4-dev libjasper-dev libopenexr-dev libtbb-dev
+mkdir build && cd build 
+cmake -D CMAKE_BUILD_TYPE=RELEASE -D WITH_TBB=ON  -D WITH_V4L=ON -D CMAKE_INSTALL_PREFIX=/usr/local/opencv330 .. 
+```
+or
+```bash
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local/opencv330 PYTHON3_EXECUTABLE = /usr/bin/python3 PYTHON_INCLUDE_DIR = /usr/include/python3.5m PYTHON_INCLUDE_DIR2 = /usr/include/x86_64-linux-gnu/python3.5m PYTHON_LIBRARY = /usr/lib/x86_64-linux-gnu/libpython3.5m.so PYTHON3_NUMPY_INCLUDE_DIRS = /usr/local/lib/python3.5/dist-packages/numpy/core/include/ ..
+make 
+sudo make install  
+sudo gedit ~/.bashrc 
+```
+Add at the end of the file
+```bash
+ export PKG_CONFIG_PATH=/usr/local/opencv330/lib/pkgconfig  
+ export LD_LIBRARY_PATH=/usr/local/opencv330/lib  
+```
+save and
+```bash
+source ~/.bashrc 
+pkg-config --modversion opencv 
+```
